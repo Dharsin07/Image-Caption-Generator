@@ -1,0 +1,21 @@
+!pip install diffusers transformers accelerate safetensors pillow
+
+import torch
+from diffusers import StableDiffusionPipeline
+from PIL import Image
+from google.colab import files
+import matplotlib.pyplot as plt
+
+model_id = "dreamlike-art/dreamlike-photoreal-2.0"
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
+
+user_text = input("Enter your imaginary land description:\n")
+final_prompt = f"{user_text}, pop-up book style, 3D paper cut art, layered paper design, vivid colors, fantasy land, detailed"
+
+image = pipe(final_prompt, height=512, width=768).images[0]
+
+plt.imshow(image)
+plt.axis("off")
+
+image.save("pop_out_imaginary_land.png")
+files.download("pop_out_imaginary_land.png")
